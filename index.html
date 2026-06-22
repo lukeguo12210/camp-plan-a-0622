@@ -449,6 +449,39 @@
       );
     }
 
+    .no-activities-block {
+      align-items: center;
+      background: #fff;
+      border-right: 0;
+      display: flex;
+      grid-column: span 6;
+      justify-content: center;
+      min-height: 136px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .no-activities-message {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      display: grid;
+      gap: 6px;
+      max-width: 360px;
+      padding: 18px 22px;
+    }
+
+    .no-activities-message strong {
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.15;
+    }
+
+    .no-activities-message span {
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
     .day:nth-child(6n) {
       border-right: 0;
     }
@@ -1100,17 +1133,17 @@
     const plans = [
       {
         name: "Plan A - Revised AI + Outdoor Mix",
-        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3 两人一起去 Y-Rangers；8/10 两人同在 Stanford/iD Tech；8/17 先把两人都放 Beginner Paddle Board。",
+        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3-8/7 暂不安排活动；8/10 两人同在 Stanford/iD Tech；8/17 先把两人都放 Beginner Paddle Board。",
         notes: [
           "可行：删除 7/20-7/24 后，Integem Junior/Teen AI Lab 只能放在 7/27-7/31。",
-          "8/3-8/7 两人都放 Y-Rangers；8/10-8/14 涂涂放 Minecraft Design，晨晨放 Roblox Developer: Lua Coding and Game Design。",
+          "8/3-8/7 暂时移除全部活动，保留为未安排周。",
+          "8/10-8/14 涂涂放 Minecraft Design，晨晨放 Roblox Developer: Lua Coding and Game Design。",
           "8/17-8/21 先把两人都放 Beginner Paddle Board；晨晨 12 岁超出该项目 7-11 岁标注，报名前需要向营地确认是否可破例。"
         ],
+        emptyWeeks: ["2026-08-03"],
         events: [
           ev("tutu", "integem-junior", "2026-07-27"),
           ev("chenchen", "integem-teen", "2026-07-27"),
-          ev("tutu", "ymca-y-rangers", "2026-08-03"),
-          ev("chenchen", "ymca-y-rangers", "2026-08-03"),
           ev("tutu", "idtech-minecraft", "2026-08-10"),
           ev("chenchen", "idtech-roblox-lua", "2026-08-10"),
           ev("tutu", "dogpatch-sup-crane", "2026-08-17"),
@@ -1204,6 +1237,17 @@
       const rows = [];
       for (let weekIndex = 0; weekIndex < calendarDays / 7; weekIndex += 1) {
         const weekStart = addDays(calendarStart, weekIndex * 7);
+        const startKey = iso(weekStart);
+        if (plan.emptyWeeks?.includes(startKey)) {
+          rows.push(`
+            <section class="week-row">
+              ${renderWeekSummary(plan, weekStart)}
+              ${renderNoActivitiesBlock(weekStart)}
+            </section>
+          `);
+          continue;
+        }
+
         const weekdayCells = [];
         for (let dayOffset = 0; dayOffset < 5; dayOffset += 1) {
           const day = addDays(weekStart, dayOffset);
@@ -1218,6 +1262,17 @@
         `);
       }
       document.getElementById("calendarGrid").innerHTML = rows.join("");
+    }
+
+    function renderNoActivitiesBlock(weekStart) {
+      return `
+        <div class="no-activities-block">
+          <div class="no-activities-message">
+            <strong>No activities planned now</strong>
+            <span>${dateShort(weekStart)}-${dateShort(addDays(weekStart, 4))} is intentionally left open for now.</span>
+          </div>
+        </div>
+      `;
     }
 
     function renderDayCell(plan, day) {
