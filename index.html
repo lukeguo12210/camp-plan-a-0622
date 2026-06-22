@@ -400,6 +400,20 @@
       line-height: 1.35;
     }
 
+    .summary-link {
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+
+    .summary-link:hover,
+    .summary-link:focus-visible {
+      text-decoration: underline;
+      outline: 0;
+    }
+
     .day {
       background: #fff;
       border-right: 1px solid var(--line);
@@ -901,7 +915,7 @@
         <div class="source-section">
           <div class="section-title">
             <h2>Source Pages</h2>
-            <span class="chip neutral">11 options</span>
+            <span class="chip neutral">12 options</span>
           </div>
           <div class="source-grid" id="sourceGrid"></div>
         </div>
@@ -1148,25 +1162,47 @@
           { start: "2026-07-27", label: "7/27-7/31", status: "Open" },
           { start: "2026-08-03", label: "8/3-8/7", status: "余2" }
         ]
+      },
+      {
+        id: "legarza-skillz-splash",
+        title: "Skillz Derby Camp / Splash Zone Camp (All day)",
+        shortTitle: "Skillz + Splash",
+        zhTitle: "运动技能与水花营",
+        zhDesc: "上午练基础运动技能，下午做运动游戏与水花活动。",
+        org: "Legarza Sports",
+        source: "Legarza event page id 10329_10330",
+        sourceImage: "camp-planner-assets/legarza-all-sports.png",
+        sourceUrl: "https://www.legarzasports.org/event-detail/?id=10329_10330",
+        price: "$595",
+        priceValue: 595,
+        time: "9:00-3:30",
+        fit: ["tutu", "chenchen"],
+        fitNote: "K-8；两人可选",
+        direction: "All-Sports / 水上趣味",
+        location: "St. Cecilia School",
+        weeks: [
+          { start: "2026-08-10", label: "8/10-8/14", status: "Confirmed" }
+        ]
       }
     ];
 
     const plans = [
       {
         name: "Plan A - Revised AI + Outdoor Mix",
-        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3 两人同在 Stanford/iD Tech；8/10-8/14 暂不安排活动；8/17 先把两人都放 Beginner Paddle Board。",
+        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3 两人同在 Stanford/iD Tech；8/10 两人同去 Legarza；8/17 先把两人都放 Beginner Paddle Board。",
         notes: [
           "可行：删除 7/20-7/24 后，Integem Junior/Teen AI Lab 只能放在 7/27-7/31。",
           "8/3-8/7 涂涂放 Minecraft Design，晨晨放 3D Printing Camp with Blender。",
-          "8/10-8/14 暂时移除全部活动，保留为未安排周。",
+          "8/10-8/14 两人都放 Legarza Skillz Derby Camp / Splash Zone Camp，地点 St. Cecilia School，9:00-3:30，价格 $595/人。",
           "8/17-8/21 先把两人都放 Beginner Paddle Board；晨晨 12 岁超出该项目 7-11 岁标注，报名前需要向营地确认是否可破例。"
         ],
-        emptyWeeks: ["2026-08-10"],
         events: [
           ev("tutu", "integem-junior", "2026-07-27"),
           ev("chenchen", "integem-teen", "2026-07-27"),
           ev("tutu", "idtech-minecraft", "2026-08-03"),
           ev("chenchen", "idtech-blender-3d", "2026-08-03"),
+          ev("tutu", "legarza-skillz-splash", "2026-08-10"),
+          ev("chenchen", "legarza-skillz-splash", "2026-08-10"),
           ev("tutu", "dogpatch-sup-crane", "2026-08-17"),
           ev("chenchen", "dogpatch-sup-crane", "2026-08-17")
         ]
@@ -1359,11 +1395,15 @@
       const caveat = event.child === "chenchen" && event.activityId === "dogpatch-sup-crane"
         ? " 需确认年龄例外。"
         : "";
+      const link = activity.sourceUrl
+        ? `<a class="summary-link" href="${activity.sourceUrl}" target="_blank" rel="noopener noreferrer">报名页</a>`
+        : "";
       return `
         <div class="summary-item ${child.className}">
           <div class="summary-kid">${child.label}</div>
           <div class="summary-title">${activity.zhTitle || activity.shortTitle || activity.title}</div>
           <div class="summary-desc">${activity.zhDesc || activity.direction}${caveat}</div>
+          ${link}
         </div>
       `;
     }
@@ -1373,13 +1413,14 @@
       const child = children[event.child];
       const week = getWeek(activity, event.start);
       const status = week?.status ? ` · ${week.status}` : "";
+      const place = activity.location ? ` · ${activity.location}` : "";
       return `
         <div class="event ${child.className}">
           <div class="event-top">
             <span class="kid-pill ${child.className}">${child.label}</span>
             <span class="event-title">${activity.shortTitle || activity.title}</span>
           </div>
-          <div class="event-meta">${activity.org} · ${activity.time}${status}</div>
+          <div class="event-meta">${activity.org}${place} · ${activity.time}${status}</div>
         </div>
       `;
     }
@@ -1447,6 +1488,8 @@
             <span class="chip">${activity.price}</span>
             <span class="chip">${activity.time}</span>
             <span class="chip">${activity.fitNote}</span>
+            ${activity.location ? `<span class="chip">${activity.location}</span>` : ""}
+            ${activity.sourceUrl ? `<a class="chip neutral" href="${activity.sourceUrl}" target="_blank" rel="noopener noreferrer">报名页</a>` : ""}
           </div>
           <div class="activity-meta">
             ${activity.weeks.map((week) => `
@@ -1479,7 +1522,8 @@
         "iD Tech p.6",
         "iD Tech p.7 Lua",
         "iD Tech p.9",
-        "iD Tech p.15 3D"
+        "iD Tech p.15 3D",
+        "Legarza Aug10"
       ].map((label) => `<span class="star-tag">${label}</span>`).join("");
     }
 
