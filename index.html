@@ -901,7 +901,7 @@
         <div class="source-section">
           <div class="section-title">
             <h2>Source Pages</h2>
-            <span class="chip neutral">10 options</span>
+            <span class="chip neutral">11 options</span>
           </div>
           <div class="source-grid" id="sourceGrid"></div>
         </div>
@@ -1109,6 +1109,27 @@
         ]
       },
       {
+        id: "idtech-blender-3d",
+        title: "3D Printing Camp with Blender",
+        shortTitle: "3D Printing",
+        zhTitle: "3D 建模与打印",
+        zhDesc: "用 Blender 做建模，把数字作品变成实体。",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.15",
+        sourceImage: "camp-planner-assets/idtech-15.jpg",
+        price: "$1,729 / 周起",
+        priceValue: 1729,
+        time: "1周 / 8小时/天",
+        fit: ["chenchen"],
+        fitNote: "晨晨符合 10-12 岁",
+        direction: "3D 设计与打印",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "Open" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "余3" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "余2" }
+        ]
+      },
+      {
         id: "idtech-mobile-game",
         title: "Mobile Game Design & App Creation Lab",
         shortTitle: "Mobile Game Lab",
@@ -1133,19 +1154,19 @@
     const plans = [
       {
         name: "Plan A - Revised AI + Outdoor Mix",
-        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3-8/7 暂不安排活动；8/10 两人同在 Stanford/iD Tech；8/17 先把两人都放 Beginner Paddle Board。",
+        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3 两人同在 Stanford/iD Tech；8/10-8/14 暂不安排活动；8/17 先把两人都放 Beginner Paddle Board。",
         notes: [
           "可行：删除 7/20-7/24 后，Integem Junior/Teen AI Lab 只能放在 7/27-7/31。",
-          "8/3-8/7 暂时移除全部活动，保留为未安排周。",
-          "8/10-8/14 涂涂放 Minecraft Design，晨晨放 Roblox Developer: Lua Coding and Game Design。",
+          "8/3-8/7 涂涂放 Minecraft Design，晨晨放 3D Printing Camp with Blender。",
+          "8/10-8/14 暂时移除全部活动，保留为未安排周。",
           "8/17-8/21 先把两人都放 Beginner Paddle Board；晨晨 12 岁超出该项目 7-11 岁标注，报名前需要向营地确认是否可破例。"
         ],
-        emptyWeeks: ["2026-08-03"],
+        emptyWeeks: ["2026-08-10"],
         events: [
           ev("tutu", "integem-junior", "2026-07-27"),
           ev("chenchen", "integem-teen", "2026-07-27"),
-          ev("tutu", "idtech-minecraft", "2026-08-10"),
-          ev("chenchen", "idtech-roblox-lua", "2026-08-10"),
+          ev("tutu", "idtech-minecraft", "2026-08-03"),
+          ev("chenchen", "idtech-blender-3d", "2026-08-03"),
           ev("tutu", "dogpatch-sup-crane", "2026-08-17"),
           ev("chenchen", "dogpatch-sup-crane", "2026-08-17")
         ]
@@ -1457,7 +1478,8 @@
         "iD Tech p.4",
         "iD Tech p.6",
         "iD Tech p.7 Lua",
-        "iD Tech p.9"
+        "iD Tech p.9",
+        "iD Tech p.15 3D"
       ].map((label) => `<span class="star-tag">${label}</span>`).join("");
     }
 
