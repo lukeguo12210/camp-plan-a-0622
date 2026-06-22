@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Summer Camp Plan Calendar</title>
+  <style>
+    :root {
+      --ink: #1c2333;
+      --muted: #667085;
+      --line: #d8dde7;
+      --paper: #f6f8f6;
+      --panel: #ffffff;
+      --blue: #2457d6;
+      --blue-soft: #e7edff;
+      --coral: #f05f43;
+      --coral-soft: #ffe9e4;
+      --teal: #087f83;
+      --teal-soft: #dff5f2;
+      --green: #60992d;
+      --yellow: #f1c644;
+      --violet: #6f4bd8;
+      --shadow: 0 18px 55px rgba(28, 35, 51, 0.12);
+      --radius: 8px;
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(8, 127, 131, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(36, 87, 214, 0.06) 1px, transparent 1px),
+        var(--paper);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: Avenir Next, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 20px;
+      align-items: end;
+      margin: 0 auto 18px;
+      max-width: 1680px;
+    }
+
+    .title-kicker {
+      color: var(--teal);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: "Avenir Next Condensed", Avenir Next, Inter, sans-serif;
+      font-size: clamp(34px, 5vw, 72px);
+      line-height: 0.92;
+      letter-spacing: 0;
+      margin: 0;
+      max-width: 860px;
+    }
+
+    .range-card {
+      align-items: center;
+      background: var(--ink);
+      border-radius: var(--radius);
+      color: white;
+      display: grid;
+      gap: 4px;
+      min-width: 250px;
+      padding: 18px 20px;
+      text-align: right;
+      box-shadow: var(--shadow);
+    }
+
+    .range-card strong {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .range-card span {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px minmax(720px, 1fr) 340px;
+      gap: 18px;
+      margin: 0 auto;
+      max-width: 1680px;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(216, 221, 231, 0.9);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 36px rgba(28, 35, 51, 0.08);
+    }
+
+    .rail,
+    .detail-rail {
+      align-self: start;
+      max-height: calc(100vh - 160px);
+      overflow: auto;
+      padding: 16px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .rail {
+      max-height: none;
+      overflow: visible;
+      position: static;
+      top: auto;
+    }
+
+    .section-title {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2,
+    .section-title h3 {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .plan-nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .plan-button {
+      background: #f7f8fb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--ink);
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      text-align: left;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .plan-button:hover,
+    .plan-button:focus-visible {
+      border-color: var(--teal);
+      outline: 0;
+      transform: translateY(-1px);
+    }
+
+    .plan-button.active {
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .plan-button b {
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .plan-button span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .key-card {
+      border-top: 1px solid var(--line);
+      margin-top: 18px;
+      padding-top: 16px;
+    }
+
+    .kid-key {
+      display: grid;
+      gap: 8px;
+    }
+
+    .kid-key div {
+      align-items: center;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .swatch {
+      border-radius: 999px;
+      display: inline-block;
+      height: 12px;
+      width: 12px;
+    }
+
+    .swatch.tutu {
+      background: var(--coral);
+    }
+
+    .swatch.chenchen {
+      background: var(--blue);
+    }
+
+    .plan-stats {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      background: #f7f8fb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      margin-top: 2px;
+    }
+
+    .calendar-wrap {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .calendar-toolbar {
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .nav-button {
+      background: var(--ink);
+      border-radius: var(--radius);
+      color: white;
+      min-width: 68px;
+      padding: 0 16px;
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      background: var(--teal);
+      outline: 0;
+    }
+
+    .plan-head {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      min-width: 0;
+    }
+
+    .plan-head h2 {
+      font-size: clamp(22px, 2.5vw, 38px);
+      line-height: 1;
+      margin: 0 0 8px;
+    }
+
+    .plan-head p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .calendar {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .weekday-row,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(92px, 1fr));
+    }
+
+    .weekday {
+      background: var(--ink);
+      border-right: 1px solid rgba(255, 255, 255, 0.16);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      padding: 11px 10px;
+      text-transform: uppercase;
+    }
+
+    .weekday:last-child {
+      border-right: 0;
+    }
+
+    .day {
+      background: #fff;
+      border-right: 1px solid var(--line);
+      border-top: 1px solid var(--line);
+      min-height: 136px;
+      padding: 9px;
+      position: relative;
+    }
+
+    .day:nth-child(7n) {
+      border-right: 0;
+    }
+
+    .day.outside {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f1f3f7,
+        #f1f3f7 7px,
+        #f7f8fb 7px,
+        #f7f8fb 14px
+      );
+      color: #98a2b3;
+    }
+
+    .date-line {
+      align-items: baseline;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .date-number {
+      font-family: "Avenir Next Condensed", Avenir Next, sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .month-mark {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .event-stack {
+      display: grid;
+      gap: 6px;
+    }
+
+    .event {
+      border: 1px solid transparent;
+      border-radius: 7px;
+      display: grid;
+      gap: 3px;
+      min-height: 54px;
+      padding: 7px;
+    }
+
+    .event.tutu {
+      background: var(--coral-soft);
+      border-color: rgba(240, 95, 67, 0.38);
+    }
+
+    .event.chenchen {
+      background: var(--blue-soft);
+      border-color: rgba(36, 87, 214, 0.34);
+    }
+
+    .event-top {
+      align-items: start;
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .kid-pill {
+      border-radius: 999px;
+      color: white;
+      flex: 0 0 auto;
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1;
+      padding: 4px 6px;
+    }
+
+    .kid-pill.tutu {
+      background: var(--coral);
+    }
+
+    .kid-pill.chenchen {
+      background: var(--blue);
+    }
+
+    .event-title {
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.15;
+      min-width: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      word-break: normal;
+    }
+
+    .event-meta {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.25;
+    }
+
+    .weekend-note {
+      align-items: center;
+      border: 1px dashed var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      display: flex;
+      font-size: 12px;
+      justify-content: center;
+      min-height: 54px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .activity-filter {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .filter-button {
+      background: #f7f8fb;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 10px;
+    }
+
+    .filter-button.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: white;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .activity-card {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .activity-card h4 {
+      font-size: 14px;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .activity-card p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .activity-meta {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 11px;
+      gap: 6px;
+    }
+
+    .chip {
+      align-items: center;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      display: inline-flex;
+      gap: 5px;
+      min-height: 26px;
+      padding: 5px 8px;
+      white-space: nowrap;
+    }
+
+    .chip.open {
+      border-color: rgba(96, 153, 45, 0.42);
+      color: #345f14;
+    }
+
+    .chip.tight {
+      border-color: rgba(240, 95, 67, 0.42);
+      color: #9d321d;
+    }
+
+    .chip.neutral {
+      border-color: rgba(111, 75, 216, 0.35);
+      color: #4c31a0;
+    }
+
+    .source-section {
+      border-top: 1px solid var(--line);
+      margin-top: 18px;
+      padding-top: 16px;
+    }
+
+    .source-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .source-card {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .source-card img {
+      aspect-ratio: 16 / 9.75;
+      display: block;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .source-body {
+      display: grid;
+      gap: 4px;
+      padding: 9px 10px 10px;
+    }
+
+    .source-body b {
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .source-body span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    .notes {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 12px;
+    }
+
+    .notes h3 {
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .notes ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .notes li {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 4px 0;
+    }
+
+    .star-row {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .star-tag {
+      background: #fff8db;
+      border: 1px solid rgba(241, 198, 68, 0.7);
+      border-radius: 999px;
+      color: #7a5d00;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 8px;
+    }
+
+    @media (max-width: 1260px) {
+      .layout {
+        grid-template-columns: 260px minmax(620px, 1fr);
+      }
+
+      .detail-rail {
+        grid-column: 1 / -1;
+        max-height: none;
+        position: static;
+      }
+
+      .source-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        padding: 16px;
+      }
+
+      .topbar,
+      .layout,
+      .calendar-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .range-card {
+        text-align: left;
+      }
+
+      .rail {
+        max-height: none;
+        position: static;
+      }
+
+      .calendar {
+        overflow-x: auto;
+      }
+
+      .weekday-row,
+      .calendar-grid {
+        min-width: 700px;
+      }
+
+      .source-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <div class="title-kicker">Starred pages plus added Stanford option</div>
+        <h1>涂涂 &amp; 晨晨 Summer Camp Organizer</h1>
+        <div class="star-row" id="starTags"></div>
+      </div>
+      <div class="range-card">
+        <strong>Jul 20-Aug 22</strong>
+        <span>2026 planning window</span>
+      </div>
+    </header>
+
+    <section class="layout" aria-label="Camp plan calendar">
+      <aside class="panel rail">
+        <div class="section-title">
+          <h2>Plan Pages</h2>
+          <span class="chip neutral" id="planCount"></span>
+        </div>
+        <nav class="plan-nav" id="planNav" aria-label="Plans"></nav>
+
+        <div class="key-card">
+          <div class="section-title">
+            <h3>Children</h3>
+          </div>
+          <div class="kid-key">
+            <div><span class="swatch tutu"></span><strong>涂涂</strong><span>8岁</span></div>
+            <div><span class="swatch chenchen"></span><strong>晨晨</strong><span>12岁</span></div>
+          </div>
+        </div>
+
+        <div class="plan-stats" id="planStats"></div>
+      </aside>
+
+      <section class="calendar-wrap">
+        <div class="calendar-toolbar">
+          <button class="nav-button" type="button" id="prevPlan">Prev</button>
+          <div class="plan-head">
+            <h2 id="activePlanName"></h2>
+            <p id="activePlanSummary"></p>
+          </div>
+          <button class="nav-button" type="button" id="nextPlan">Next</button>
+        </div>
+
+        <div class="calendar" aria-live="polite">
+          <div class="weekday-row" id="weekdayRow"></div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <div class="notes">
+          <h3 id="noteTitle"></h3>
+          <ul id="planNotes"></ul>
+        </div>
+      </section>
+
+      <aside class="panel detail-rail">
+        <div class="section-title">
+          <h2>Activity Options</h2>
+          <span class="chip neutral">starred + added</span>
+        </div>
+        <div class="activity-filter" id="activityFilter"></div>
+        <div class="activity-list" id="activityList"></div>
+
+        <div class="source-section">
+          <div class="section-title">
+            <h2>Source Pages</h2>
+            <span class="chip neutral">10 options</span>
+          </div>
+          <div class="source-grid" id="sourceGrid"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const children = {
+      tutu: { label: "涂涂", age: "8岁", className: "tutu" },
+      chenchen: { label: "晨晨", age: "12岁", className: "chenchen" }
+    };
+
+    const activities = [
+      {
+        id: "ymca-y-rangers",
+        title: "Y-Rangers",
+        shortTitle: "Y-Rangers",
+        org: "Stonestown Family YMCA",
+        source: "ymca-stonestown-final.pdf p.1",
+        sourceImage: "camp-planner-assets/ymca-1.jpg",
+        price: "$700 / 周",
+        priceValue: 700,
+        time: "8:00-5:00",
+        fit: ["tutu", "chenchen"],
+        fitNote: "涂涂符合；晨晨为家庭指定可选",
+        direction: "自然探索与环保",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "" }
+        ]
+      },
+      {
+        id: "integem-junior",
+        title: "AI Experience Lab for Junior",
+        shortTitle: "Junior AI Lab",
+        org: "Camp Integem",
+        source: "integem-final.pdf p.1",
+        sourceImage: "camp-planner-assets/integem-1.jpg",
+        price: "$669 / 周",
+        priceValue: 669,
+        time: "9:00-3:00",
+        fit: ["tutu"],
+        fitNote: "涂涂符合 6-8 岁",
+        direction: "编程、AI 与游戏设计",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "余3" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "余3" }
+        ]
+      },
+      {
+        id: "integem-teen",
+        title: "AI Experience Lab for Teen",
+        shortTitle: "Teen AI Lab",
+        org: "Camp Integem",
+        source: "integem-final.pdf p.10",
+        sourceImage: "camp-planner-assets/integem-10.jpg",
+        price: "$699 / 周",
+        priceValue: 699,
+        time: "9:00-3:00",
+        fit: ["chenchen"],
+        fitNote: "晨晨符合 10-14 岁",
+        direction: "编程、AI 与游戏设计",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "余2" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "余2" }
+        ]
+      },
+      {
+        id: "dogpatch-sup-crane",
+        title: "Beginner Paddle Board (Crane Cove)",
+        shortTitle: "Paddle Board",
+        org: "Dogpatch Paddle & Kayak",
+        source: "dogpatch-final.pdf p.2",
+        sourceImage: "camp-planner-assets/dogpatch-2.jpg",
+        price: "$799 / 次",
+        priceValue: 799,
+        time: "9:00-3:00",
+        fit: ["tutu"],
+        fitNote: "涂涂符合 7-11 岁",
+        direction: "户外水上运动",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "" },
+          { start: "2026-08-17", label: "8/17-8/21", status: "" }
+        ]
+      },
+      {
+        id: "idtech-coding101",
+        title: "Coding 101 Camp",
+        shortTitle: "Coding 101",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.1",
+        sourceImage: "camp-planner-assets/idtech-1.jpg",
+        price: "$1,379 / 周起",
+        priceValue: 1379,
+        time: "1周 / 8小时/天",
+        fit: ["tutu"],
+        fitNote: "涂涂符合 7-9 岁",
+        direction: "编程与 AI",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "余4" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "余4" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "余2" }
+        ]
+      },
+      {
+        id: "idtech-minecraft",
+        title: "Minecraft Game Design Camp",
+        shortTitle: "Minecraft Design",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.3",
+        sourceImage: "camp-planner-assets/idtech-3.jpg",
+        price: "$1,409 / 周起",
+        priceValue: 1409,
+        time: "1周 / 8小时/天",
+        fit: ["tutu"],
+        fitNote: "涂涂符合 7-9 岁",
+        direction: "游戏设计与 App",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "余3" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "余3" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "Open" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "余4" }
+        ]
+      },
+      {
+        id: "idtech-roblox-game",
+        title: "Roblox Game Design Camp",
+        shortTitle: "Roblox Design",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.4",
+        sourceImage: "camp-planner-assets/idtech-4.jpg",
+        price: "$1,409 / 周起",
+        priceValue: 1409,
+        time: "1周 / 8小时/天",
+        fit: ["tutu"],
+        fitNote: "涂涂符合 7-9 岁",
+        direction: "游戏设计与 App",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "Open" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "余4" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "余3" }
+        ]
+      },
+      {
+        id: "idtech-roblox-dev",
+        title: "Roblox Developer: Imaginative Game Design",
+        shortTitle: "Roblox Developer",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.6",
+        sourceImage: "camp-planner-assets/idtech-6.jpg",
+        price: "$1,529 / 周起",
+        priceValue: 1529,
+        time: "1周 / 8小时/天",
+        fit: ["chenchen"],
+        fitNote: "晨晨符合 10-12 岁",
+        direction: "游戏设计与 App",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "Open" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "Open" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "余1" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "Open" }
+        ]
+      },
+      {
+        id: "idtech-roblox-lua",
+        title: "Roblox Developer: Lua Coding and Game Design",
+        shortTitle: "Roblox Lua",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.7",
+        sourceImage: "camp-planner-assets/idtech-7.jpg",
+        price: "$1,529 / 周起",
+        priceValue: 1529,
+        time: "1周 / 8小时/天",
+        fit: ["chenchen"],
+        fitNote: "晨晨符合 10-12 岁",
+        direction: "游戏设计与 App",
+        weeks: [
+          { start: "2026-07-20", label: "7/20-7/24", status: "Open" },
+          { start: "2026-07-27", label: "7/27-7/31", status: "Open" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "余1" },
+          { start: "2026-08-10", label: "8/10-8/14", status: "Open" }
+        ]
+      },
+      {
+        id: "idtech-mobile-game",
+        title: "Mobile Game Design & App Creation Lab",
+        shortTitle: "Mobile Game Lab",
+        org: "iD Tech at Stanford",
+        source: "finalized-idtech.pdf p.9",
+        sourceImage: "camp-planner-assets/idtech-9.jpg",
+        price: "$1,579 / 周起",
+        priceValue: 1579,
+        time: "1周 / 8小时/天",
+        fit: ["chenchen"],
+        fitNote: "晨晨符合 10-12 岁",
+        direction: "游戏设计与 App",
+        weeks: [
+          { start: "2026-07-27", label: "7/27-7/31", status: "Open" },
+          { start: "2026-08-03", label: "8/3-8/7", status: "余2" }
+        ]
+      }
+    ];
+
+    const plans = [
+      {
+        name: "Plan A - Revised AI + Outdoor Mix",
+        summary: "7/20-7/24 留空；7/27 安排 Integem Junior/Teen AI Lab；8/3 两人一起去 Y-Rangers；8/10 两人同在 Stanford/iD Tech；8/17 先把两人都放 Beginner Paddle Board。",
+        notes: [
+          "可行：删除 7/20-7/24 后，Integem Junior/Teen AI Lab 只能放在 7/27-7/31。",
+          "8/3-8/7 两人都放 Y-Rangers；8/10-8/14 涂涂放 Minecraft Design，晨晨放 Roblox Developer: Lua Coding and Game Design。",
+          "8/17-8/21 先把两人都放 Beginner Paddle Board；晨晨 12 岁超出该项目 7-11 岁标注，报名前需要向营地确认是否可破例。"
+        ],
+        events: [
+          ev("tutu", "integem-junior", "2026-07-27"),
+          ev("chenchen", "integem-teen", "2026-07-27"),
+          ev("tutu", "ymca-y-rangers", "2026-08-03"),
+          ev("chenchen", "ymca-y-rangers", "2026-08-03"),
+          ev("tutu", "idtech-minecraft", "2026-08-10"),
+          ev("chenchen", "idtech-roblox-lua", "2026-08-10"),
+          ev("tutu", "dogpatch-sup-crane", "2026-08-17"),
+          ev("chenchen", "dogpatch-sup-crane", "2026-08-17")
+        ]
+      }
+    ];
+
+    const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const calendarStart = parseDate("2026-07-20");
+    const calendarDays = 35;
+    let activePlan = 0;
+    let activityFilter = "all";
+
+    function ev(child, activityId, start) {
+      return { child, activityId, start };
+    }
+
+    function parseDate(value) {
+      const [year, month, day] = value.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function iso(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function addDays(date, amount) {
+      const next = new Date(date);
+      next.setDate(date.getDate() + amount);
+      return next;
+    }
+
+    function getActivity(id) {
+      return activities.find((activity) => activity.id === id);
+    }
+
+    function getWeek(activity, start) {
+      return activity.weeks.find((week) => week.start === start);
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function dateShort(date) {
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    }
+
+    function renderWeekdays() {
+      document.getElementById("weekdayRow").innerHTML = weekdays
+        .map((day) => `<div class="weekday">${day}</div>`)
+        .join("");
+    }
+
+    function renderPlanNav() {
+      document.getElementById("planCount").textContent = `${plans.length} calendars`;
+      document.getElementById("planNav").innerHTML = plans.map((plan, index) => `
+        <button class="plan-button ${index === activePlan ? "active" : ""}" type="button" data-plan="${index}">
+          <b>${plan.name}</b>
+          <span>${plan.summary}</span>
+        </button>
+      `).join("");
+
+      document.querySelectorAll("[data-plan]").forEach((button) => {
+        button.addEventListener("click", () => {
+          activePlan = Number(button.dataset.plan);
+          render();
+        });
+      });
+    }
+
+    function eventOccursOn(event, date) {
+      const start = parseDate(event.start);
+      const end = addDays(start, 4);
+      return date >= start && date <= end;
+    }
+
+    function renderCalendar() {
+      const plan = plans[activePlan];
+      document.getElementById("activePlanName").textContent = plan.name;
+      document.getElementById("activePlanSummary").textContent = plan.summary;
+
+      const cells = [];
+      for (let i = 0; i < calendarDays; i += 1) {
+        const day = addDays(calendarStart, i);
+        const key = iso(day);
+        const outside = key > "2026-08-22";
+        const dayEvents = plan.events.filter((event) => eventOccursOn(event, day));
+        const isWeekend = day.getDay() === 0 || day.getDay() === 6;
+        cells.push(`
+          <article class="day ${outside ? "outside" : ""}">
+            <div class="date-line">
+              <span class="date-number">${day.getDate()}</span>
+              <span class="month-mark">${day.toLocaleString("en-US", { month: "short" })}</span>
+            </div>
+            <div class="event-stack">
+              ${dayEvents.map(renderEvent).join("")}
+              ${!dayEvents.length && isWeekend && !outside ? '<div class="weekend-note">Weekend buffer</div>' : ""}
+              ${outside ? '<div class="weekend-note">Outside window</div>' : ""}
+            </div>
+          </article>
+        `);
+      }
+      document.getElementById("calendarGrid").innerHTML = cells.join("");
+    }
+
+    function renderEvent(event) {
+      const activity = getActivity(event.activityId);
+      const child = children[event.child];
+      const week = getWeek(activity, event.start);
+      const status = week?.status ? ` · ${week.status}` : "";
+      return `
+        <div class="event ${child.className}">
+          <div class="event-top">
+            <span class="kid-pill ${child.className}">${child.label}</span>
+            <span class="event-title">${activity.shortTitle || activity.title}</span>
+          </div>
+          <div class="event-meta">${activity.org} · ${activity.time}${status}</div>
+        </div>
+      `;
+    }
+
+    function renderStats() {
+      const plan = plans[activePlan];
+      const total = plan.events.reduce((sum, event) => sum + getActivity(event.activityId).priceValue, 0);
+      const tutuWeeks = plan.events.filter((event) => event.child === "tutu").length;
+      const chenchenWeeks = plan.events.filter((event) => event.child === "chenchen").length;
+      const sharedWeeks = new Set(plan.events.map((event) => event.start)).size;
+      document.getElementById("planStats").innerHTML = `
+        <div class="stat"><span>Estimated total</span><strong>${formatCurrency(total)}</strong></div>
+        <div class="stat"><span>Calendar weeks</span><strong>${sharedWeeks}</strong></div>
+        <div class="stat"><span>涂涂 weeks</span><strong>${tutuWeeks}</strong></div>
+        <div class="stat"><span>晨晨 weeks</span><strong>${chenchenWeeks}</strong></div>
+      `;
+    }
+
+    function renderNotes() {
+      const plan = plans[activePlan];
+      document.getElementById("noteTitle").textContent = `${plan.name} notes`;
+      document.getElementById("planNotes").innerHTML = plan.notes
+        .map((note) => `<li>${note}</li>`)
+        .join("");
+    }
+
+    function renderActivityFilter() {
+      const filters = [
+        { id: "all", label: "All" },
+        { id: "tutu", label: "涂涂" },
+        { id: "chenchen", label: "晨晨" }
+      ];
+      document.getElementById("activityFilter").innerHTML = filters.map((filter) => `
+        <button class="filter-button ${filter.id === activityFilter ? "active" : ""}" type="button" data-filter="${filter.id}">
+          ${filter.label}
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          activityFilter = button.dataset.filter;
+          renderActivities();
+          renderActivityFilter();
+        });
+      });
+    }
+
+    function chipClass(status) {
+      if (!status || status === "Open") return "open";
+      if (status === "余1" || status === "余2") return "tight";
+      return "neutral";
+    }
+
+    function renderActivities() {
+      const visible = activities.filter((activity) => {
+        if (activityFilter === "all") return true;
+        return activity.fit.includes(activityFilter);
+      });
+      document.getElementById("activityList").innerHTML = visible.map((activity) => `
+        <article class="activity-card">
+          <div>
+            <h4>${activity.title}</h4>
+            <p>${activity.org} · ${activity.direction}</p>
+          </div>
+          <div class="activity-meta">
+            <span class="chip">${activity.price}</span>
+            <span class="chip">${activity.time}</span>
+            <span class="chip">${activity.fitNote}</span>
+          </div>
+          <div class="activity-meta">
+            ${activity.weeks.map((week) => `
+              <span class="chip ${chipClass(week.status)}">${week.label}${week.status ? ` · ${week.status}` : ""}</span>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderSources() {
+      document.getElementById("sourceGrid").innerHTML = activities.map((activity) => `
+        <article class="source-card">
+          <img src="${activity.sourceImage}" alt="${activity.title} PDF source page">
+          <div class="source-body">
+            <b>${activity.title}</b>
+            <span>${activity.source}</span>
+          </div>
+        </article>
+      `).join("");
+
+      document.getElementById("starTags").innerHTML = [
+        "YMCA p.1",
+        "Integem p.1",
+        "Integem p.10",
+        "Dogpatch p.2",
+        "iD Tech p.1",
+        "iD Tech p.3",
+        "iD Tech p.4",
+        "iD Tech p.6",
+        "iD Tech p.7 Lua",
+        "iD Tech p.9"
+      ].map((label) => `<span class="star-tag">${label}</span>`).join("");
+    }
+
+    function render() {
+      renderPlanNav();
+      renderCalendar();
+      renderStats();
+      renderNotes();
+    }
+
+    document.getElementById("prevPlan").addEventListener("click", () => {
+      activePlan = (activePlan - 1 + plans.length) % plans.length;
+      render();
+    });
+
+    document.getElementById("nextPlan").addEventListener("click", () => {
+      activePlan = (activePlan + 1) % plans.length;
+      render();
+    });
+
+    renderWeekdays();
+    renderActivityFilter();
+    renderActivities();
+    renderSources();
+    render();
+  </script>
+</body>
+</html>
