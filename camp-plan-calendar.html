@@ -314,9 +314,13 @@
     }
 
     .weekday-row,
+    .week-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.92fr) repeat(5, minmax(82px, 1fr)) minmax(74px, 0.54fr);
+    }
+
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, minmax(92px, 1fr));
     }
 
     .weekday {
@@ -334,16 +338,118 @@
       border-right: 0;
     }
 
+    .week-row {
+      border-top: 1px solid var(--line);
+    }
+
+    .week-row:first-child {
+      border-top: 0;
+    }
+
+    .week-summary {
+      background: #fbfcff;
+      border-right: 1px solid var(--line);
+      min-height: 136px;
+      padding: 10px;
+    }
+
+    .week-summary-label {
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .summary-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .summary-item {
+      border-left: 4px solid var(--line);
+      display: grid;
+      gap: 3px;
+      padding-left: 8px;
+    }
+
+    .summary-item.tutu {
+      border-left-color: var(--coral);
+    }
+
+    .summary-item.chenchen {
+      border-left-color: var(--blue);
+    }
+
+    .summary-kid {
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .summary-title {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .summary-desc {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
     .day {
       background: #fff;
       border-right: 1px solid var(--line);
-      border-top: 1px solid var(--line);
       min-height: 136px;
       padding: 9px;
       position: relative;
     }
 
-    .day:nth-child(7n) {
+    .weekend-block {
+      background: #fafbfc;
+      border-right: 0;
+      min-height: 136px;
+      padding: 9px 7px;
+    }
+
+    .weekend-dates {
+      color: var(--muted);
+      display: grid;
+      font-size: 11px;
+      font-weight: 800;
+      gap: 2px;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .weekend-label {
+      align-items: center;
+      border: 1px dashed var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      display: flex;
+      font-size: 11px;
+      justify-content: center;
+      min-height: 70px;
+      padding: 8px 4px;
+      text-align: center;
+    }
+
+    .weekend-block.outside {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f1f3f7,
+        #f1f3f7 7px,
+        #f7f8fb 7px,
+        #f7f8fb 14px
+      );
+    }
+
+    .day:nth-child(6n) {
       border-right: 0;
     }
 
@@ -674,8 +780,9 @@
       }
 
       .weekday-row,
-      .calendar-grid {
-        min-width: 700px;
+      .calendar-grid,
+      .week-row {
+        min-width: 720px;
       }
 
       .source-grid {
@@ -780,6 +887,8 @@
         id: "ymca-y-rangers",
         title: "Y-Rangers",
         shortTitle: "Y-Rangers",
+        zhTitle: "自然巡护营",
+        zhDesc: "户外探索湾区自然，学习环保与观察。",
         org: "Stonestown Family YMCA",
         source: "ymca-stonestown-final.pdf p.1",
         sourceImage: "camp-planner-assets/ymca-1.jpg",
@@ -799,6 +908,8 @@
         id: "integem-junior",
         title: "AI Experience Lab for Junior",
         shortTitle: "Junior AI Lab",
+        zhTitle: "少儿 AI 体验",
+        zhDesc: "用入门项目接触 AI、编程和游戏创作。",
         org: "Camp Integem",
         source: "integem-final.pdf p.1",
         sourceImage: "camp-planner-assets/integem-1.jpg",
@@ -817,6 +928,8 @@
         id: "integem-teen",
         title: "AI Experience Lab for Teen",
         shortTitle: "Teen AI Lab",
+        zhTitle: "青少年 AI 体验",
+        zhDesc: "用项目方式学习 AI、编程和游戏设计。",
         org: "Camp Integem",
         source: "integem-final.pdf p.10",
         sourceImage: "camp-planner-assets/integem-10.jpg",
@@ -835,6 +948,8 @@
         id: "dogpatch-sup-crane",
         title: "Beginner Paddle Board (Crane Cove)",
         shortTitle: "Paddle Board",
+        zhTitle: "初级桨板",
+        zhDesc: "学习平衡、划桨和水上安全基础。",
         org: "Dogpatch Paddle & Kayak",
         source: "dogpatch-final.pdf p.2",
         sourceImage: "camp-planner-assets/dogpatch-2.jpg",
@@ -856,6 +971,8 @@
         id: "idtech-coding101",
         title: "Coding 101 Camp",
         shortTitle: "Coding 101",
+        zhTitle: "编程入门",
+        zhDesc: "用轻量项目建立代码逻辑和信心。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.1",
         sourceImage: "camp-planner-assets/idtech-1.jpg",
@@ -875,6 +992,8 @@
         id: "idtech-minecraft",
         title: "Minecraft Game Design Camp",
         shortTitle: "Minecraft Design",
+        zhTitle: "Minecraft 游戏设计",
+        zhDesc: "用建造世界学习规则、关卡和互动设计。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.3",
         sourceImage: "camp-planner-assets/idtech-3.jpg",
@@ -895,6 +1014,8 @@
         id: "idtech-roblox-game",
         title: "Roblox Game Design Camp",
         shortTitle: "Roblox Design",
+        zhTitle: "Roblox 游戏设计",
+        zhDesc: "用 Roblox 做角色、关卡和玩法设计。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.4",
         sourceImage: "camp-planner-assets/idtech-4.jpg",
@@ -914,6 +1035,8 @@
         id: "idtech-roblox-dev",
         title: "Roblox Developer: Imaginative Game Design",
         shortTitle: "Roblox Developer",
+        zhTitle: "Roblox 创意开发",
+        zhDesc: "把游戏想法推进到更完整的设计制作。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.6",
         sourceImage: "camp-planner-assets/idtech-6.jpg",
@@ -934,6 +1057,8 @@
         id: "idtech-roblox-lua",
         title: "Roblox Developer: Lua Coding and Game Design",
         shortTitle: "Roblox Lua",
+        zhTitle: "Roblox Lua 编程",
+        zhDesc: "用 Lua 控制游戏行为，边做边学代码。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.7",
         sourceImage: "camp-planner-assets/idtech-7.jpg",
@@ -954,6 +1079,8 @@
         id: "idtech-mobile-game",
         title: "Mobile Game Design & App Creation Lab",
         shortTitle: "Mobile Game Lab",
+        zhTitle: "移动游戏与 App",
+        zhDesc: "从游戏设计扩展到 app 交互和产品思维。",
         org: "iD Tech at Stanford",
         source: "finalized-idtech.pdf p.9",
         sourceImage: "camp-planner-assets/idtech-9.jpg",
@@ -992,7 +1119,7 @@
       }
     ];
 
-    const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const weekdays = ["本周安排", "Mon", "Tue", "Wed", "Thu", "Fri", "Weekend"];
     const calendarStart = parseDate("2026-07-20");
     const calendarDays = 35;
     let activePlan = 0;
@@ -1074,28 +1201,95 @@
       document.getElementById("activePlanName").textContent = plan.name;
       document.getElementById("activePlanSummary").textContent = plan.summary;
 
-      const cells = [];
-      for (let i = 0; i < calendarDays; i += 1) {
-        const day = addDays(calendarStart, i);
-        const key = iso(day);
-        const outside = key > "2026-08-22";
-        const dayEvents = plan.events.filter((event) => eventOccursOn(event, day));
-        const isWeekend = day.getDay() === 0 || day.getDay() === 6;
-        cells.push(`
-          <article class="day ${outside ? "outside" : ""}">
-            <div class="date-line">
-              <span class="date-number">${day.getDate()}</span>
-              <span class="month-mark">${day.toLocaleString("en-US", { month: "short" })}</span>
-            </div>
-            <div class="event-stack">
-              ${dayEvents.map(renderEvent).join("")}
-              ${!dayEvents.length && isWeekend && !outside ? '<div class="weekend-note">Weekend buffer</div>' : ""}
-              ${outside ? '<div class="weekend-note">Outside window</div>' : ""}
-            </div>
-          </article>
+      const rows = [];
+      for (let weekIndex = 0; weekIndex < calendarDays / 7; weekIndex += 1) {
+        const weekStart = addDays(calendarStart, weekIndex * 7);
+        const weekdayCells = [];
+        for (let dayOffset = 0; dayOffset < 5; dayOffset += 1) {
+          const day = addDays(weekStart, dayOffset);
+          weekdayCells.push(renderDayCell(plan, day));
+        }
+        rows.push(`
+          <section class="week-row">
+            ${renderWeekSummary(plan, weekStart)}
+            ${weekdayCells.join("")}
+            ${renderWeekendBlock(weekStart)}
+          </section>
         `);
       }
-      document.getElementById("calendarGrid").innerHTML = cells.join("");
+      document.getElementById("calendarGrid").innerHTML = rows.join("");
+    }
+
+    function renderDayCell(plan, day) {
+      const key = iso(day);
+      const outside = key > "2026-08-22";
+      const dayEvents = plan.events.filter((event) => eventOccursOn(event, day));
+      return `
+        <article class="day ${outside ? "outside" : ""}">
+          <div class="date-line">
+            <span class="date-number">${day.getDate()}</span>
+            <span class="month-mark">${day.toLocaleString("en-US", { month: "short" })}</span>
+          </div>
+          <div class="event-stack">
+            ${dayEvents.map(renderEvent).join("")}
+            ${outside ? '<div class="weekend-note">Outside window</div>' : ""}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderWeekendBlock(weekStart) {
+      const saturday = addDays(weekStart, 5);
+      const sunday = addDays(weekStart, 6);
+      const sundayOutside = iso(sunday) > "2026-08-22";
+      const label = sundayOutside ? "周末 / 结束" : "周末休息";
+      return `
+        <aside class="weekend-block ${sundayOutside ? "outside" : ""}">
+          <div class="weekend-dates">
+            <span>${dateShort(saturday)} ${saturday.toLocaleString("en-US", { month: "short" })}</span>
+            <span>${dateShort(sunday)} ${sundayOutside ? "outside" : sunday.toLocaleString("en-US", { month: "short" })}</span>
+          </div>
+          <div class="weekend-label">${label}</div>
+        </aside>
+      `;
+    }
+
+    function renderWeekSummary(plan, weekStart) {
+      const startKey = iso(weekStart);
+      const weekEvents = plan.events
+        .filter((event) => event.start === startKey)
+        .sort((a, b) => (a.child === "tutu" ? 0 : 1) - (b.child === "tutu" ? 0 : 1));
+
+      const content = weekEvents.length
+        ? weekEvents.map(renderSummaryItem).join("")
+        : `
+          <div class="summary-item">
+            <div class="summary-title">空档 / 休息</div>
+            <div class="summary-desc">本周暂不安排营地，保留家庭或调整空间。</div>
+          </div>
+        `;
+
+      return `
+        <aside class="week-summary">
+          <div class="week-summary-label">${dateShort(weekStart)}-${dateShort(addDays(weekStart, 4))}</div>
+          <div class="summary-stack">${content}</div>
+        </aside>
+      `;
+    }
+
+    function renderSummaryItem(event) {
+      const activity = getActivity(event.activityId);
+      const child = children[event.child];
+      const caveat = event.child === "chenchen" && event.activityId === "dogpatch-sup-crane"
+        ? " 需确认年龄例外。"
+        : "";
+      return `
+        <div class="summary-item ${child.className}">
+          <div class="summary-kid">${child.label}</div>
+          <div class="summary-title">${activity.zhTitle || activity.shortTitle || activity.title}</div>
+          <div class="summary-desc">${activity.zhDesc || activity.direction}${caveat}</div>
+        </div>
+      `;
     }
 
     function renderEvent(event) {
